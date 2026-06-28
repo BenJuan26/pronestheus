@@ -115,9 +115,9 @@ func buildMetrics() *Metrics {
     var nestLabels = []string{"id", "label"}
     return &Metrics{
         up:               prometheus.NewDesc("nest_up", "Was talking to Nest API successful.", nil, nil),
-        ambientTemp:      prometheus.NewDesc("nest_ambient_temperature_fahrenheit", "Inside temperature in Fahrenheit.", nestLabels, nil),
-        setpointTemp:     prometheus.NewDesc("nest_setpoint_temperature_fahrenheit", "Setpoint temperature in Fahrenheit.", nestLabels, nil),
-        setpointTempHvac: prometheus.NewDesc("nest_setpoint_temperature_hvac_fahrenheit", "Setpoint HVAC temperature in Fahrenheit.", nestLabels, nil),
+        ambientTemp:      prometheus.NewDesc("nest_ambient_temperature_celsius", "Inside temperature in Celsius.", nestLabels, nil),
+        setpointTemp:     prometheus.NewDesc("nest_setpoint_temperature_celsius", "Setpoint temperature in Celsius.", nestLabels, nil),
+        setpointTempHvac: prometheus.NewDesc("nest_setpoint_temperature_hvac_celsius", "Setpoint HVAC temperature in Celsius.", nestLabels, nil),
         humidity:         prometheus.NewDesc("nest_humidity_percent", "Inside humidity.", nestLabels, nil),
         heating:          prometheus.NewDesc("nest_heating", "Is thermostat heating.", nestLabels, nil),
         cooling:          prometheus.NewDesc("nest_cooling", "Is thermostat cooling.", nestLabels, nil),
@@ -220,9 +220,9 @@ func (c *Collector) getNestReadings() (thermostats []*Thermostat, err error) {
 		thermostat := Thermostat{
 			ID:           device.Get("name").String(),
 			Label:        device.Get("traits.sdm\\.devices\\.traits\\.Info.customName").String(),
-			AmbientTemp:  device.Get("traits.sdm\\.devices\\.traits\\.Temperature.ambientTemperatureCelsius").Float() * 9/5 + 32,
-			SetpointTemp: device.Get("traits.sdm\\.devices\\.traits\\.ThermostatTemperatureSetpoint.heatCelsius").Float() * 9/5 + 32,
-			SetpointTempHvac: device.Get("traits.sdm\\.devices\\.traits\\.ThermostatTemperatureSetpoint.coolCelsius").Float() * 9/5 + 32,
+			AmbientTemp:  device.Get("traits.sdm\\.devices\\.traits\\.Temperature.ambientTemperatureCelsius").Float(),
+			SetpointTemp: device.Get("traits.sdm\\.devices\\.traits\\.ThermostatTemperatureSetpoint.heatCelsius").Float(),
+			SetpointTempHvac: device.Get("traits.sdm\\.devices\\.traits\\.ThermostatTemperatureSetpoint.coolCelsius").Float(),
 			Humidity:     device.Get("traits.sdm\\.devices\\.traits\\.Humidity.ambientHumidityPercent").Float(),
 			Status:       device.Get("traits.sdm\\.devices\\.traits\\.ThermostatHvac.status").String(),
 			Mode: device.Get("traits.sdm\\.devices\\.traits\\.ThermostatMode.mode").String(),
