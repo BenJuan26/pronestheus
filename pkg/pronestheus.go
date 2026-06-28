@@ -17,18 +17,19 @@ import (
 
 // ExporterConfig contains configuration for the Exporter.
 type ExporterConfig struct {
-	ListenAddr            *string
-	MetricsPath           *string
-	Timeout               *int
-	NestURL               *string
-	NestOAuthClientID     *string
-	NestOAuthClientSecret *string
-	NestOAuthToken        *oauth2.Token // Only used to mock a dummy token in tests
-	NestProjectID         *string
-	NestRefreshToken      *string
-	WeatherLocation       *string
-	WeatherURL            *string
-	WeatherToken          *string
+	ListenAddr               *string
+	MetricsPath              *string
+	Timeout                  *int
+	NestURL                  *string
+	NestOAuthClientID        *string
+	NestOAuthClientSecret    *string
+	NestOAuthToken           *oauth2.Token // Only used to mock a dummy token in tests
+	NestProjectID            *string
+	NestRefreshToken         *string
+	NestRefreshTokenFilePath *string
+	WeatherLocation          *string
+	WeatherURL               *string
+	WeatherToken             *string
 }
 
 // Exporter is a Prometheus exporter.
@@ -80,14 +81,15 @@ func (e *Exporter) Run() error {
 
 func registerNestCollector(cfg *ExporterConfig) error {
 	nestConfig := nest.Config{
-		Logger:            logger,
-		Timeout:           *cfg.Timeout,
-		APIURL:            *cfg.NestURL,
-		OAuthClientID:     *cfg.NestOAuthClientID,
-		OAuthClientSecret: *cfg.NestOAuthClientSecret,
-		RefreshToken:      *cfg.NestRefreshToken,
-		ProjectID:         *cfg.NestProjectID,
-		OAuthToken:        cfg.NestOAuthToken,
+		Logger:               logger,
+		Timeout:              *cfg.Timeout,
+		APIURL:               *cfg.NestURL,
+		OAuthClientID:        *cfg.NestOAuthClientID,
+		OAuthClientSecret:    *cfg.NestOAuthClientSecret,
+		RefreshToken:         *cfg.NestRefreshToken,
+		RefreshTokenFilePath: *cfg.NestRefreshTokenFilePath,
+		ProjectID:            *cfg.NestProjectID,
+		OAuthToken:           cfg.NestOAuthToken,
 	}
 
 	nestCollector, err := nest.New(nestConfig)
